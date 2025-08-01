@@ -63,6 +63,7 @@
     height: inherit;
 }
 
+/* 兼容不同宽度屏幕的设备 */
 @media (max-width: 576px) {
 
     .ejs_overlays_gba canvas {
@@ -71,19 +72,17 @@
     }
 
 }
-
-/* 兼容小屏幕设备 */
 @media (min-width: 567px) and (max-width: 768px) {
 
     .ejs_overlays_gba canvas {
         max-width: 66%;
-        top: -5.2%;
+        top: -5.3%;
     }
 
 }
 @media (min-width: 769px) and (max-width: 992px) {
     .ejs_overlays_gba canvas {
-        max-width: 54.5%;
+        max-width: 54.4%;
         top: -5.2%;
     }
     
@@ -104,11 +103,47 @@
     }
 
 }
-@media (min-width: 1201px) {
+@media (min-width: 1201px) and (max-width: 1366px){
 
     .ejs_overlays_gba canvas {
         max-width: 88%;
         top: -5.2%;
+    }
+
+}
+@media (min-width: 1367px){
+
+    .ejs_overlays_gba canvas {
+        max-width: 55.9%;
+        top: -5.3%;
+    }
+
+}
+
+/* 兼容不同宽度和高度的设备 */
+@media (min-width: 2400px) and (min-height: 1080px){
+
+    .ejs_overlays_gba canvas {
+        max-width: 52.7%;
+        top: -5.3%;
+    }
+
+}
+@media (min-width: 567px) and (max-width: 768px) and (min-height: 274px) and (max-height: 428px){
+
+    .ejs_overlays_gba canvas {
+        max-width: 42%;
+        top: -5.3%;
+    }
+
+}
+
+@media (min-width: 274px) and (max-width: 428px) and (min-height: 567px) and (max-height: 768px){
+
+    .ejs_overlays_gba c
+    anvas {
+        max-width: 99%;
+        top: -29%;
     }
 
 }
