@@ -11,7 +11,7 @@ const rootPath = path.resolve(__dirname, "../");
 async function doMinify() {
     await minify({
         compressor: terser,
-        input: path.join(rootPath, "data/src/*.js"),
+        input: path.join(rootPath, "data/src/*.js").replace(/\\/g, '/'),
         output: path.join(rootPath, "data/emulator.min.js"),
     })
         .catch(function (err) {

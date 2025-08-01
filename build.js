@@ -58,9 +58,13 @@ if (!build_type) {
     const updatedNpmIgnoreContent = npmIgnoreContent.replace('data/cores/*', 'data/cores/core-README.md\ndata/cores/package.json');
     fs.writeFileSync(distNpmIgnorePath, updatedNpmIgnoreContent, 'utf8');
 
+    // 👇 定义 7z.exe 的路径（根据你的实际路径调整）
+    const sevenBin = path.resolve('./tools/7z/7z.exe'); // 路径可自定义
+
     Seven.add(`dist/${version}.7z`, './', {
         $raw: ['-xr@dist/.ignore'],
-        $progress: true
+        $progress: true,
+        $bin: sevenBin // 指定 7z.exe 的路径
     }).on('progress', function (progress) {
         progressData['7z'] = progress.percent;
     }).on('end', function() {
@@ -70,7 +74,8 @@ if (!build_type) {
 
     Seven.add(`dist/${version}.zip`, './', {
         $raw: ['-xr@dist/.ignore'],
-        $progress: true
+        $progress: true,
+        $bin: sevenBin // 指定 7z.exe 的路径
     }).on('progress', function (progress) {
         progressData['zip'] = progress.percent;
     }).on('end', function() {
