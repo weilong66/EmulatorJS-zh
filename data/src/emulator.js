@@ -79,7 +79,11 @@ class EmulatorJS {
         let rv = [];
         for (let i = 0; i < listeners.length; i++) {
             element.addEventListener(listeners[i], callback);
-            const data = { cb: callback, elem: element, listener: listeners[i] };
+            const data = {
+                cb: callback,
+                elem: element,
+                listener: listeners[i]
+            };
             rv.push(data);
         }
         return rv;
@@ -95,9 +99,14 @@ class EmulatorJS {
             if (data) {
                 data.then((game) => {
                     if (opts.method === "HEAD") {
-                        cb({ headers: {} });
+                        cb({
+                            headers: {}
+                        });
                     } else {
-                        cb({ headers: {}, data: game });
+                        cb({
+                            headers: {},
+                            data: game
+                        });
                     }
                 })
                 return;
@@ -108,11 +117,15 @@ class EmulatorJS {
                 path = this.config.filePaths[path.split("/").pop()];
             }
             let url;
-            try { url = new URL(path) } catch(e) {};
+            try {
+                url = new URL(path)
+            } catch (e) {};
             if (url && !["http:", "https:"].includes(url.protocol)) {
                 //Most commonly blob: urls. Not sure what else it could be
                 if (opts.method === "HEAD") {
-                    cb({ headers: {} });
+                    cb({
+                        headers: {}
+                    });
                     return;
                 }
                 try {
@@ -121,11 +134,16 @@ class EmulatorJS {
                         res = await res.arrayBuffer();
                     } else {
                         res = await res.text();
-                        try { res = JSON.parse(res) } catch(e) {}
+                        try {
+                            res = JSON.parse(res)
+                        } catch (e) {}
                     }
                     if (path.startsWith("blob:")) URL.revokeObjectURL(path);
-                    cb({ data: res, headers: {} });
-                } catch(e) {
+                    cb({
+                        data: res,
+                        headers: {}
+                    });
+                } catch (e) {
                     cb(-1);
                 }
                 return;
@@ -137,14 +155,16 @@ class EmulatorJS {
                     progressCB(progress);
                 });
             }
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (xhr.readyState === xhr.DONE) {
                     let data = xhr.response;
                     if (xhr.status.toString().startsWith("4") || xhr.status.toString().startsWith("5")) {
                         cb(-1);
                         return;
                     }
-                    try { data = JSON.parse(data) } catch(e) {}
+                    try {
+                        data = JSON.parse(data)
+                    } catch (e) {}
                     cb({
                         data: data,
                         headers: {
@@ -213,13 +233,17 @@ class EmulatorJS {
             case 1: // Force mobile
             case "1":
             case "mobile":
-                if (this.debug) { console.log("Force mobile mode is enabled"); }
+                if (this.debug) {
+                    console.log("Force mobile mode is enabled");
+                }
                 this.config.browserMode = 1;
                 break;
             case 2: // Force desktop
             case "2":
             case "desktop":
-                if (this.debug) { console.log("Force desktop mode is enabled"); }
+                if (this.debug) {
+                    console.log("Force desktop mode is enabled");
+                }
                 this.config.browserMode = 2;
                 break;
             default: // Auto detect
@@ -256,10 +280,12 @@ class EmulatorJS {
             }
 
             let check = false;
-            (function (a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true; })(navigator.userAgent || navigator.vendor || window.opera);
+            (function (a) {
+                if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+            })(navigator.userAgent || navigator.vendor || window.opera);
             return check;
         })();
-        this.hasTouchScreen = (function() {
+        this.hasTouchScreen = (function () {
             if (window.PointerEvent && ("maxTouchPoints" in navigator)) {
                 if (navigator.maxTouchPoints > 0) {
                     return true;
@@ -348,10 +374,34 @@ class EmulatorJS {
 
         this.createStartButton();
         this.handleResize();
+        
+        //设置"遮罩"
+        this.setOverlays(this.config.overlays);
     }
+
+    // 根据遮罩值设置"遮罩"
+    setOverlays(overlays) {
+        const ejsGame = this.game; // 获取 canvas 元素
+        const ejsVGButton = document.getElementsByClassName("ejs_virtualGamepad_parent")[0]; //获取虚拟按钮控件
+        if (ejsGame) {
+            if (overlays && overlays != "disabled") {
+                //为画面添加类名以应用遮罩样式
+                ejsGame.className = ["ejs_overlays_" + overlays].join(" ");
+                //为虚拟按钮添加类名以应用遮罩样式
+                ejsVGButton.className = ["ejs_virtualGamepad_parent", "ejs_vg_overlays_" + overlays].join(" ");
+            } else {
+                // 设置元素的类名只包含需要保留的类名
+                ejsGame.className = ["ejs_game"].join(" ");
+                //为虚拟按钮添加类名以应用遮罩样式
+                ejsVGButton.className = ["ejs_virtualGamepad_parent"].join(" ");
+            }
+        }
+    }
+
+
     setColor(color) {
         if (typeof color !== "string") color = "";
-        let getColor = function(color) {
+        let getColor = function (color) {
             color = color.toLowerCase();
             if (color && /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/.test(color)) {
                 if (color.length === 4) {
@@ -423,7 +473,7 @@ class EmulatorJS {
         } else {
             try {
                 document.querySelector('div[class="ejs_ad_iframe"]').remove();
-            } catch(e) {}
+            } catch (e) {}
             this.config.adUrl = url;
             this.setupAds(this.config.adUrl, this.config.adSize[0], this.config.adSize[1]);
         }
@@ -597,7 +647,10 @@ class EmulatorJS {
             });
         }
         const report = "cores/reports/" + this.getCore() + ".json";
-        this.downloadFile(report, null, false, { responseType: "text", method: "GET" }).then(async rep => {
+        this.downloadFile(report, null, false, {
+            responseType: "text",
+            method: "GET"
+        }).then(async rep => {
             if (rep === -1 || typeof rep === "string" || typeof rep.data === "string") {
                 rep = {};
             } else {
@@ -635,14 +688,20 @@ class EmulatorJS {
             const corePath = "cores/" + filename;
             let res = await this.downloadFile(corePath, (progress) => {
                 this.textElem.innerText = this.localization("Download Game Core") + progress;
-            }, false, { responseType: "arraybuffer", method: "GET" });
+            }, false, {
+                responseType: "arraybuffer",
+                method: "GET"
+            });
             if (res === -1) {
                 console.log("File not found, attemping to fetch from emulatorjs cdn.");
                 console.error("**THIS METHOD IS A FAILSAFE, AND NOT OFFICIALLY SUPPORTED. USE AT YOUR OWN RISK**");
                 let version = this.ejs_version.endsWith("-beta") ? "nightly" : this.ejs_version;
                 res = await this.downloadFile(`https://cdn.emulatorjs.org/${version}/data/${corePath}`, (progress) => {
                     this.textElem.innerText = this.localization("Download Game Core") + progress;
-                }, true, { responseType: "arraybuffer", method: "GET" });
+                }, true, {
+                    responseType: "arraybuffer",
+                    method: "GET"
+                });
                 if (res === -1) {
                     if (!this.supportsWebgl2) {
                         this.startGameError(this.localization("Outdated graphics driver"));
@@ -662,7 +721,9 @@ class EmulatorJS {
     }
     initGameCore(js, wasm, thread) {
         let script = this.createElement("script");
-        script.src = URL.createObjectURL(new Blob([js], { type: "application/javascript" }));
+        script.src = URL.createObjectURL(new Blob([js], {
+            type: "application/javascript"
+        }));
         script.addEventListener("load", () => {
             this.initModule(wasm, thread);
         });
@@ -709,7 +770,10 @@ class EmulatorJS {
 
             this.downloadFile(this.config.loadState, (progress) => {
                 this.textElem.innerText = this.localization("Download Game State") + progress;
-            }, true, { responseType: "arraybuffer", method: "GET" }).then((res) => {
+            }, true, {
+                responseType: "arraybuffer",
+                method: "GET"
+            }).then((res) => {
                 if (res === -1) {
                     this.startGameError(this.localization("Error downloading game state"));
                     return;
@@ -748,7 +812,9 @@ class EmulatorJS {
 
             this.textElem.innerText = progressMessage;
             if (!this.debug) {
-                const res = await this.downloadFile(assetUrl, null, true, { method: "HEAD" });
+                const res = await this.downloadFile(assetUrl, null, true, {
+                    method: "HEAD"
+                });
                 const result = await this.storage.rom.get(assetUrl.split("/").pop());
                 if (result && result["content-length"] === res.headers["content-length"] && result.type === type) {
                     await gotData(result.data);
@@ -757,7 +823,10 @@ class EmulatorJS {
             }
             const res = await this.downloadFile(assetUrl, (progress) => {
                 this.textElem.innerText = progressMessage + progress;
-            }, true, { responseType: "arraybuffer", method: "GET" });
+            }, true, {
+                responseType: "arraybuffer",
+                method: "GET"
+            });
             if (res === -1) {
                 this.startGameError(this.localization("Network Error"));
                 resolve(assetUrl);
@@ -902,7 +971,10 @@ class EmulatorJS {
             const downloadFile = async () => {
                 const res = await this.downloadFile(this.config.gameUrl, (progress) => {
                     this.textElem.innerText = this.localization("Download Game Data") + progress;
-                }, true, { responseType: "arraybuffer", method: "GET" });
+                }, true, {
+                    responseType: "arraybuffer",
+                    method: "GET"
+                });
                 if (res === -1) {
                     this.startGameError(this.localization("Network Error"));
                     return;
@@ -923,7 +995,9 @@ class EmulatorJS {
             }
 
             if (!this.debug) {
-                this.downloadFile(this.config.gameUrl, null, true, { method: "HEAD" }).then(async (res) => {
+                this.downloadFile(this.config.gameUrl, null, true, {
+                    method: "HEAD"
+                }).then(async (res) => {
                     const name = (typeof this.config.gameUrl === "string") ? this.config.gameUrl.split("/").pop() : "game";
                     const result = await this.storage.rom.get(name);
                     if (result && result["content-length"] === res.headers["content-length"] && name !== "game") {
@@ -983,9 +1057,13 @@ class EmulatorJS {
             locateFile: function (fileName) {
                 if (this.debug) console.log(fileName);
                 if (fileName.endsWith(".wasm")) {
-                    return URL.createObjectURL(new Blob([wasmData], { type: "application/wasm" }));
+                    return URL.createObjectURL(new Blob([wasmData], {
+                        type: "application/wasm"
+                    }));
                 } else if (fileName.endsWith(".worker.js")) {
-                    return URL.createObjectURL(new Blob([threadData], { type: "application/javascript" }));
+                    return URL.createObjectURL(new Blob([threadData], {
+                        type: "application/javascript"
+                    }));
                 }
             },
             getSavExt: () => {
@@ -1042,7 +1120,7 @@ class EmulatorJS {
             if (this.config.fullscreenOnLoad) {
                 try {
                     this.toggleFullscreen(true);
-                } catch(e) {
+                } catch (e) {
                     if (this.debug) console.warn("Could not fullscreen on load");
                 }
             }
@@ -1051,7 +1129,7 @@ class EmulatorJS {
                 //Safari is --- funny
                 this.checkStarted();
             }
-        } catch(e) {
+        } catch (e) {
             console.warn("Failed to start game", e);
             this.startGameError(this.localization("Failed to start game"));
             this.callEvent("exit");
@@ -1379,7 +1457,7 @@ class EmulatorJS {
                         visible: true,
                         displayName: buttonUserOpts[searchKey].displayName || searchKey,
                         icon: buttonUserOpts[searchKey].icon || "",
-                        callback: buttonUserOpts[searchKey].callback || (() => { }),
+                        callback: buttonUserOpts[searchKey].callback || (() => {}),
                         custom: true
                     };
                 }
@@ -1389,7 +1467,7 @@ class EmulatorJS {
                     mergedButtonOptions[searchKey].visible = buttonUserOpts[searchKey];
                 } else if (typeof buttonUserOpts[searchKey] === "object") {
                     // If the value is an object, merge it with the default button properties
-    
+
                     // if the button is the contextMenu, only allow the visible property to be set
                     if (searchKey === "contextMenu") {
                         mergedButtonOptions[searchKey].visible = buttonUserOpts[searchKey].visible !== undefined ? buttonUserOpts[searchKey].visible : true;
@@ -1416,18 +1494,18 @@ class EmulatorJS {
                         }
                     }
                 }
-    
+
                 // behaviour exceptions
                 switch (searchKey) {
                     case "playPause":
                         mergedButtonOptions.play.visible = mergedButtonOptions.playPause.visible;
                         mergedButtonOptions.pause.visible = mergedButtonOptions.playPause.visible;
                         break;
-    
+
                     case "mute":
                         mergedButtonOptions.unmute.visible = mergedButtonOptions.mute.visible;
                         break;
-    
+
                     case "fullscreen":
                         mergedButtonOptions.enterFullscreen.visible = mergedButtonOptions.fullscreen.visible;
                         mergedButtonOptions.exitFullscreen.visible = mergedButtonOptions.fullscreen.visible;
@@ -1673,7 +1751,7 @@ class EmulatorJS {
         if (this.currentPopup !== null) {
             try {
                 this.currentPopup.remove();
-            } catch(e) {}
+            } catch (e) {}
             this.currentPopup = null;
         }
     }
@@ -1810,7 +1888,7 @@ class EmulatorJS {
                 show();
             }
             if (this.menu.mousemoveListener) this.removeEventListener(this.menu.mousemoveListener);
-            
+
             if ((this.preGetSetting("menubarBehavior") || "downward") === "downward") {
                 this.menu.mousemoveListener = this.addEventListener(this.elements.parent, "mousemove", mouseListener);
             } else {
@@ -1868,12 +1946,14 @@ class EmulatorJS {
             }
             return both ? [button, svg, text] : button;
         }
-        
+
         const restartButton = addButton(this.config.buttonOpts.restart, () => {
             if (this.isNetplay && this.netplay.owner) {
                 this.gameManager.restart();
                 this.netplay.reset();
-                this.netplay.sendMessage({ restart: true });
+                this.netplay.sendMessage({
+                    restart: true
+                });
                 this.play();
             } else if (!this.isNetplay) {
                 this.gameManager.restart();
@@ -1883,7 +1963,9 @@ class EmulatorJS {
             if (this.isNetplay && this.netplay.owner) {
                 this.pause();
                 this.gameManager.saveSaveFiles();
-                this.netplay.sendMessage({ pause: true });
+                this.netplay.sendMessage({
+                    pause: true
+                });
             } else if (!this.isNetplay) {
                 this.pause();
             }
@@ -1891,7 +1973,9 @@ class EmulatorJS {
         const playButton = addButton(this.config.buttonOpts.play, () => {
             if (this.isNetplay && this.netplay.owner) {
                 this.play();
-                this.netplay.sendMessage({ play: true });
+                this.netplay.sendMessage({
+                    play: true
+                });
             } else if (!this.isNetplay) {
                 this.play();
             }
@@ -1931,11 +2015,14 @@ class EmulatorJS {
             let state;
             try {
                 state = this.gameManager.getState();
-            } catch(e) {
+            } catch (e) {
                 this.displayMessage(this.localization("FAILED TO SAVE STATE"));
                 return;
             }
-            const { screenshot, format } = await this.takeScreenshot(this.capture.photo.source, this.capture.photo.format, this.capture.photo.upscale);
+            const {
+                screenshot,
+                format
+            } = await this.takeScreenshot(this.capture.photo.source, this.capture.photo.format, this.capture.photo.upscale);
             const called = this.callEvent("saveState", {
                 screenshot: screenshot,
                 format: format,
@@ -1986,7 +2073,10 @@ class EmulatorJS {
 
         const saveSavFiles = addButton(this.config.buttonOpts.saveSavFiles, async () => {
             const file = await this.gameManager.getSaveFile();
-            const { screenshot, format } = await this.takeScreenshot(this.capture.photo.source, this.capture.photo.format, this.capture.photo.upscale);
+            const {
+                screenshot,
+                format
+            } = await this.takeScreenshot(this.capture.photo.source, this.capture.photo.format, this.capture.photo.upscale);
             const called = this.callEvent("saveSave", {
                 screenshot: screenshot,
                 format: format,
@@ -2020,7 +2110,7 @@ class EmulatorJS {
         const netplay = addButton(this.config.buttonOpts.netplay, async () => {
             this.openNetplayMenu();
         });
-        
+
         // add custom buttons
         // get all elements from this.config.buttonOpts with custom: true
         if (this.config.buttonOpts) {
@@ -2192,7 +2282,7 @@ class EmulatorJS {
                 if (this.isMobile) {
                     try {
                         screen.orientation.lock(this.getCore(true) === "nds" ? "portrait" : "landscape").catch(e => {});
-                    } catch(e) {}
+                    } catch (e) {}
                 }
             } else {
                 if (document.exitFullscreen) {
@@ -2209,7 +2299,7 @@ class EmulatorJS {
                 if (this.isMobile) {
                     try {
                         screen.orientation.unlock();
-                    } catch(e) {}
+                    } catch (e) {}
                 }
             }
         }
@@ -2443,7 +2533,12 @@ class EmulatorJS {
                 this.saveSettings();
             },
             "Clear": () => {
-                this.controls = { 0: {}, 1: {}, 2: {}, 3: {} };
+                this.controls = {
+                    0: {},
+                    1: {},
+                    2: {},
+                    3: {}
+                };
                 this.setupKeys();
                 this.checkGamepadInputs();
                 this.saveSettings();
@@ -2458,349 +2553,1145 @@ class EmulatorJS {
 
         let buttons;
         if ("gb" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("nes" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
             if (this.getCore() === "nestopia") {
-                buttons.push({ id: 10, label: this.localization("SWAP DISKS") });
+                buttons.push({
+                    id: 10,
+                    label: this.localization("SWAP DISKS")
+                });
             } else {
-                buttons.push({ id: 10, label: this.localization("SWAP DISKS") });
-                buttons.push({ id: 11, label: this.localization("EJECT/INSERT DISK") });
+                buttons.push({
+                    id: 10,
+                    label: this.localization("SWAP DISKS")
+                });
+                buttons.push({
+                    id: 11,
+                    label: this.localization("EJECT/INSERT DISK")
+                });
             }
         } else if ("snes" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 9, label: this.localization("X") },
-                { id: 1, label: this.localization("Y") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
-                { id: 10, label: this.localization("L") },
-                { id: 11, label: this.localization("R") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 9,
+                    label: this.localization("X")
+                },
+                {
+                    id: 1,
+                    label: this.localization("Y")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
+                {
+                    id: 10,
+                    label: this.localization("L")
+                },
+                {
+                    id: 11,
+                    label: this.localization("R")
+                },
             ];
         } else if ("n64" === this.getControlScheme()) {
-            buttons = [
-                { id: 0, label: this.localization("A") },
-                { id: 1, label: this.localization("B") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("D-PAD UP") },
-                { id: 5, label: this.localization("D-PAD DOWN") },
-                { id: 6, label: this.localization("D-PAD LEFT") },
-                { id: 7, label: this.localization("D-PAD RIGHT") },
-                { id: 10, label: this.localization("L") },
-                { id: 11, label: this.localization("R") },
-                { id: 12, label: this.localization("Z") },
-                { id: 19, label: this.localization("STICK UP") },
-                { id: 18, label: this.localization("STICK DOWN") },
-                { id: 17, label: this.localization("STICK LEFT") },
-                { id: 16, label: this.localization("STICK RIGHT") },
-                { id: 23, label: this.localization("C-PAD UP") },
-                { id: 22, label: this.localization("C-PAD DOWN") },
-                { id: 21, label: this.localization("C-PAD LEFT") },
-                { id: 20, label: this.localization("C-PAD RIGHT") },
+            buttons = [{
+                    id: 0,
+                    label: this.localization("A")
+                },
+                {
+                    id: 1,
+                    label: this.localization("B")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("D-PAD UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("D-PAD DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("D-PAD LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("D-PAD RIGHT")
+                },
+                {
+                    id: 10,
+                    label: this.localization("L")
+                },
+                {
+                    id: 11,
+                    label: this.localization("R")
+                },
+                {
+                    id: 12,
+                    label: this.localization("Z")
+                },
+                {
+                    id: 19,
+                    label: this.localization("STICK UP")
+                },
+                {
+                    id: 18,
+                    label: this.localization("STICK DOWN")
+                },
+                {
+                    id: 17,
+                    label: this.localization("STICK LEFT")
+                },
+                {
+                    id: 16,
+                    label: this.localization("STICK RIGHT")
+                },
+                {
+                    id: 23,
+                    label: this.localization("C-PAD UP")
+                },
+                {
+                    id: 22,
+                    label: this.localization("C-PAD DOWN")
+                },
+                {
+                    id: 21,
+                    label: this.localization("C-PAD LEFT")
+                },
+                {
+                    id: 20,
+                    label: this.localization("C-PAD RIGHT")
+                },
             ];
         } else if ("gba" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 10, label: this.localization("L") },
-                { id: 11, label: this.localization("R") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 10,
+                    label: this.localization("L")
+                },
+                {
+                    id: 11,
+                    label: this.localization("R")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("nds" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 9, label: this.localization("X") },
-                { id: 1, label: this.localization("Y") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
-                { id: 10, label: this.localization("L") },
-                { id: 11, label: this.localization("R") },
-                { id: 14, label: this.localization("Microphone") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 9,
+                    label: this.localization("X")
+                },
+                {
+                    id: 1,
+                    label: this.localization("Y")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
+                {
+                    id: 10,
+                    label: this.localization("L")
+                },
+                {
+                    id: 11,
+                    label: this.localization("R")
+                },
+                {
+                    id: 14,
+                    label: this.localization("Microphone")
+                },
             ];
         } else if ("vb" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 10, label: this.localization("L") },
-                { id: 11, label: this.localization("R") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("LEFT D-PAD UP") },
-                { id: 5, label: this.localization("LEFT D-PAD DOWN") },
-                { id: 6, label: this.localization("LEFT D-PAD LEFT") },
-                { id: 7, label: this.localization("LEFT D-PAD RIGHT") },
-                { id: 19, label: this.localization("RIGHT D-PAD UP") },
-                { id: 18, label: this.localization("RIGHT D-PAD DOWN") },
-                { id: 17, label: this.localization("RIGHT D-PAD LEFT") },
-                { id: 16, label: this.localization("RIGHT D-PAD RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 10,
+                    label: this.localization("L")
+                },
+                {
+                    id: 11,
+                    label: this.localization("R")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("LEFT D-PAD UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("LEFT D-PAD DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT D-PAD LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("LEFT D-PAD RIGHT")
+                },
+                {
+                    id: 19,
+                    label: this.localization("RIGHT D-PAD UP")
+                },
+                {
+                    id: 18,
+                    label: this.localization("RIGHT D-PAD DOWN")
+                },
+                {
+                    id: 17,
+                    label: this.localization("RIGHT D-PAD LEFT")
+                },
+                {
+                    id: 16,
+                    label: this.localization("RIGHT D-PAD RIGHT")
+                },
             ];
         } else if (["segaCD", "sega32x"].includes(this.getControlScheme())) {
-            buttons = [
-                { id: 1, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 8, label: this.localization("C") },
-                { id: 10, label: this.localization("X") },
-                { id: 9, label: this.localization("Y") },
-                { id: 11, label: this.localization("Z") },
-                { id: 3, label: this.localization("START") },
-                { id: 2, label: this.localization("MODE") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 1,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 8,
+                    label: this.localization("C")
+                },
+                {
+                    id: 10,
+                    label: this.localization("X")
+                },
+                {
+                    id: 9,
+                    label: this.localization("Y")
+                },
+                {
+                    id: 11,
+                    label: this.localization("Z")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 2,
+                    label: this.localization("MODE")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("segaMS" === this.getControlScheme()) {
-            buttons = [
-                { id: 0, label: this.localization("BUTTON 1 / START") },
-                { id: 8, label: this.localization("BUTTON 2") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 0,
+                    label: this.localization("BUTTON 1 / START")
+                },
+                {
+                    id: 8,
+                    label: this.localization("BUTTON 2")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("segaGG" === this.getControlScheme()) {
-            buttons = [
-                { id: 0, label: this.localization("BUTTON 1") },
-                { id: 8, label: this.localization("BUTTON 2") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 0,
+                    label: this.localization("BUTTON 1")
+                },
+                {
+                    id: 8,
+                    label: this.localization("BUTTON 2")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("segaSaturn" === this.getControlScheme()) {
-            buttons = [
-                { id: 1, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 8, label: this.localization("C") },
-                { id: 9, label: this.localization("X") },
-                { id: 10, label: this.localization("Y") },
-                { id: 11, label: this.localization("Z") },
-                { id: 12, label: this.localization("L") },
-                { id: 13, label: this.localization("R") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 1,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 8,
+                    label: this.localization("C")
+                },
+                {
+                    id: 9,
+                    label: this.localization("X")
+                },
+                {
+                    id: 10,
+                    label: this.localization("Y")
+                },
+                {
+                    id: 11,
+                    label: this.localization("Z")
+                },
+                {
+                    id: 12,
+                    label: this.localization("L")
+                },
+                {
+                    id: 13,
+                    label: this.localization("R")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("3do" === this.getControlScheme()) {
-            buttons = [
-                { id: 1, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 8, label: this.localization("C") },
-                { id: 10, label: this.localization("L") },
-                { id: 11, label: this.localization("R") },
-                { id: 2, label: this.localization("X") },
-                { id: 3, label: this.localization("P") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 1,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 8,
+                    label: this.localization("C")
+                },
+                {
+                    id: 10,
+                    label: this.localization("L")
+                },
+                {
+                    id: 11,
+                    label: this.localization("R")
+                },
+                {
+                    id: 2,
+                    label: this.localization("X")
+                },
+                {
+                    id: 3,
+                    label: this.localization("P")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("atari2600" === this.getControlScheme()) {
-            buttons = [
-                { id: 0, label: this.localization("FIRE") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("RESET") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
-                { id: 10, label: this.localization("LEFT DIFFICULTY A") },
-                { id: 12, label: this.localization("LEFT DIFFICULTY B") },
-                { id: 11, label: this.localization("RIGHT DIFFICULTY A") },
-                { id: 13, label: this.localization("RIGHT DIFFICULTY B") },
-                { id: 14, label: this.localization("COLOR") },
-                { id: 15, label: this.localization("B/W") },
+            buttons = [{
+                    id: 0,
+                    label: this.localization("FIRE")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("RESET")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
+                {
+                    id: 10,
+                    label: this.localization("LEFT DIFFICULTY A")
+                },
+                {
+                    id: 12,
+                    label: this.localization("LEFT DIFFICULTY B")
+                },
+                {
+                    id: 11,
+                    label: this.localization("RIGHT DIFFICULTY A")
+                },
+                {
+                    id: 13,
+                    label: this.localization("RIGHT DIFFICULTY B")
+                },
+                {
+                    id: 14,
+                    label: this.localization("COLOR")
+                },
+                {
+                    id: 15,
+                    label: this.localization("B/W")
+                },
             ];
         } else if ("atari7800" === this.getControlScheme()) {
-            buttons = [
-                { id: 0, label: this.localization("BUTTON 1") },
-                { id: 8, label: this.localization("BUTTON 2") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("PAUSE") },
-                { id: 9, label: this.localization("RESET") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
-                { id: 10, label: this.localization("LEFT DIFFICULTY") },
-                { id: 11, label: this.localization("RIGHT DIFFICULTY") },
+            buttons = [{
+                    id: 0,
+                    label: this.localization("BUTTON 1")
+                },
+                {
+                    id: 8,
+                    label: this.localization("BUTTON 2")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("PAUSE")
+                },
+                {
+                    id: 9,
+                    label: this.localization("RESET")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
+                {
+                    id: 10,
+                    label: this.localization("LEFT DIFFICULTY")
+                },
+                {
+                    id: 11,
+                    label: this.localization("RIGHT DIFFICULTY")
+                },
             ];
         } else if ("lynx" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 10, label: this.localization("OPTION 1") },
-                { id: 11, label: this.localization("OPTION 2") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 10,
+                    label: this.localization("OPTION 1")
+                },
+                {
+                    id: 11,
+                    label: this.localization("OPTION 2")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("jaguar" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 1, label: this.localization("C") },
-                { id: 2, label: this.localization("PAUSE") },
-                { id: 3, label: this.localization("OPTION") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 1,
+                    label: this.localization("C")
+                },
+                {
+                    id: 2,
+                    label: this.localization("PAUSE")
+                },
+                {
+                    id: 3,
+                    label: this.localization("OPTION")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("pce" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("I") },
-                { id: 0, label: this.localization("II") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("RUN") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("I")
+                },
+                {
+                    id: 0,
+                    label: this.localization("II")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("RUN")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("ngp" === this.getControlScheme()) {
-            buttons = [
-                { id: 0, label: this.localization("A") },
-                { id: 8, label: this.localization("B") },
-                { id: 3, label: this.localization("OPTION") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 0,
+                    label: this.localization("A")
+                },
+                {
+                    id: 8,
+                    label: this.localization("B")
+                },
+                {
+                    id: 3,
+                    label: this.localization("OPTION")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("ws" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("A") },
-                { id: 0, label: this.localization("B") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("X UP") },
-                { id: 5, label: this.localization("X DOWN") },
-                { id: 6, label: this.localization("X LEFT") },
-                { id: 7, label: this.localization("X RIGHT") },
-                { id: 13, label: this.localization("Y UP") },
-                { id: 12, label: this.localization("Y DOWN") },
-                { id: 10, label: this.localization("Y LEFT") },
-                { id: 11, label: this.localization("Y RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("X UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("X DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("X LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("X RIGHT")
+                },
+                {
+                    id: 13,
+                    label: this.localization("Y UP")
+                },
+                {
+                    id: 12,
+                    label: this.localization("Y DOWN")
+                },
+                {
+                    id: 10,
+                    label: this.localization("Y LEFT")
+                },
+                {
+                    id: 11,
+                    label: this.localization("Y RIGHT")
+                },
             ];
         } else if ("coleco" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("LEFT BUTTON") },
-                { id: 0, label: this.localization("RIGHT BUTTON") },
-                { id: 9, label: this.localization("1") },
-                { id: 1, label: this.localization("2") },
-                { id: 11, label: this.localization("3") },
-                { id: 10, label: this.localization("4") },
-                { id: 13, label: this.localization("5") },
-                { id: 12, label: this.localization("6") },
-                { id: 15, label: this.localization("7") },
-                { id: 14, label: this.localization("8") },
-                { id: 2, label: this.localization("*") },
-                { id: 3, label: this.localization("#") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("LEFT BUTTON")
+                },
+                {
+                    id: 0,
+                    label: this.localization("RIGHT BUTTON")
+                },
+                {
+                    id: 9,
+                    label: this.localization("1")
+                },
+                {
+                    id: 1,
+                    label: this.localization("2")
+                },
+                {
+                    id: 11,
+                    label: this.localization("3")
+                },
+                {
+                    id: 10,
+                    label: this.localization("4")
+                },
+                {
+                    id: 13,
+                    label: this.localization("5")
+                },
+                {
+                    id: 12,
+                    label: this.localization("6")
+                },
+                {
+                    id: 15,
+                    label: this.localization("7")
+                },
+                {
+                    id: 14,
+                    label: this.localization("8")
+                },
+                {
+                    id: 2,
+                    label: this.localization("*")
+                },
+                {
+                    id: 3,
+                    label: this.localization("#")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("pcfx" === this.getControlScheme()) {
-            buttons = [
-                { id: 8, label: this.localization("I") },
-                { id: 0, label: this.localization("II") },
-                { id: 9, label: this.localization("III") },
-                { id: 1, label: this.localization("IV") },
-                { id: 10, label: this.localization("V") },
-                { id: 11, label: this.localization("VI") },
-                { id: 3, label: this.localization("RUN") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 12, label: this.localization("MODE1") },
-                { id: 13, label: this.localization("MODE2") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
+            buttons = [{
+                    id: 8,
+                    label: this.localization("I")
+                },
+                {
+                    id: 0,
+                    label: this.localization("II")
+                },
+                {
+                    id: 9,
+                    label: this.localization("III")
+                },
+                {
+                    id: 1,
+                    label: this.localization("IV")
+                },
+                {
+                    id: 10,
+                    label: this.localization("V")
+                },
+                {
+                    id: 11,
+                    label: this.localization("VI")
+                },
+                {
+                    id: 3,
+                    label: this.localization("RUN")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 12,
+                    label: this.localization("MODE1")
+                },
+                {
+                    id: 13,
+                    label: this.localization("MODE2")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
             ];
         } else if ("psp" === this.getControlScheme()) {
-            buttons = [
-                { id: 9, label: this.localization("\u25B3") }, // △
-                { id: 1, label: this.localization("\u25A1") }, // □
-                { id: 0, label: this.localization("\uFF58") }, // ｘ
-                { id: 8, label: this.localization("\u25CB") }, // ○
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
-                { id: 10, label: this.localization("L") },
-                { id: 11, label: this.localization("R") },
-                { id: 19, label: this.localization("STICK UP") },
-                { id: 18, label: this.localization("STICK DOWN") },
-                { id: 17, label: this.localization("STICK LEFT") },
-                { id: 16, label: this.localization("STICK RIGHT") },
+            buttons = [{
+                    id: 9,
+                    label: this.localization("\u25B3")
+                }, // △
+                {
+                    id: 1,
+                    label: this.localization("\u25A1")
+                }, // □
+                {
+                    id: 0,
+                    label: this.localization("\uFF58")
+                }, // ｘ
+                {
+                    id: 8,
+                    label: this.localization("\u25CB")
+                }, // ○
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
+                {
+                    id: 10,
+                    label: this.localization("L")
+                },
+                {
+                    id: 11,
+                    label: this.localization("R")
+                },
+                {
+                    id: 19,
+                    label: this.localization("STICK UP")
+                },
+                {
+                    id: 18,
+                    label: this.localization("STICK DOWN")
+                },
+                {
+                    id: 17,
+                    label: this.localization("STICK LEFT")
+                },
+                {
+                    id: 16,
+                    label: this.localization("STICK RIGHT")
+                },
             ];
         } else {
-            buttons = [
-                { id: 0, label: this.localization("B") },
-                { id: 1, label: this.localization("Y") },
-                { id: 2, label: this.localization("SELECT") },
-                { id: 3, label: this.localization("START") },
-                { id: 4, label: this.localization("UP") },
-                { id: 5, label: this.localization("DOWN") },
-                { id: 6, label: this.localization("LEFT") },
-                { id: 7, label: this.localization("RIGHT") },
-                { id: 8, label: this.localization("A") },
-                { id: 9, label: this.localization("X") },
-                { id: 10, label: this.localization("L") },
-                { id: 11, label: this.localization("R") },
-                { id: 12, label: this.localization("L2") },
-                { id: 13, label: this.localization("R2") },
-                { id: 14, label: this.localization("L3") },
-                { id: 15, label: this.localization("R3") },
-                { id: 19, label: this.localization("L STICK UP") },
-                { id: 18, label: this.localization("L STICK DOWN") },
-                { id: 17, label: this.localization("L STICK LEFT") },
-                { id: 16, label: this.localization("L STICK RIGHT") },
-                { id: 23, label: this.localization("R STICK UP") },
-                { id: 22, label: this.localization("R STICK DOWN") },
-                { id: 21, label: this.localization("R STICK LEFT") },
-                { id: 20, label: this.localization("R STICK RIGHT") },
+            buttons = [{
+                    id: 0,
+                    label: this.localization("B")
+                },
+                {
+                    id: 1,
+                    label: this.localization("Y")
+                },
+                {
+                    id: 2,
+                    label: this.localization("SELECT")
+                },
+                {
+                    id: 3,
+                    label: this.localization("START")
+                },
+                {
+                    id: 4,
+                    label: this.localization("UP")
+                },
+                {
+                    id: 5,
+                    label: this.localization("DOWN")
+                },
+                {
+                    id: 6,
+                    label: this.localization("LEFT")
+                },
+                {
+                    id: 7,
+                    label: this.localization("RIGHT")
+                },
+                {
+                    id: 8,
+                    label: this.localization("A")
+                },
+                {
+                    id: 9,
+                    label: this.localization("X")
+                },
+                {
+                    id: 10,
+                    label: this.localization("L")
+                },
+                {
+                    id: 11,
+                    label: this.localization("R")
+                },
+                {
+                    id: 12,
+                    label: this.localization("L2")
+                },
+                {
+                    id: 13,
+                    label: this.localization("R2")
+                },
+                {
+                    id: 14,
+                    label: this.localization("L3")
+                },
+                {
+                    id: 15,
+                    label: this.localization("R3")
+                },
+                {
+                    id: 19,
+                    label: this.localization("L STICK UP")
+                },
+                {
+                    id: 18,
+                    label: this.localization("L STICK DOWN")
+                },
+                {
+                    id: 17,
+                    label: this.localization("L STICK LEFT")
+                },
+                {
+                    id: 16,
+                    label: this.localization("L STICK RIGHT")
+                },
+                {
+                    id: 23,
+                    label: this.localization("R STICK UP")
+                },
+                {
+                    id: 22,
+                    label: this.localization("R STICK DOWN")
+                },
+                {
+                    id: 21,
+                    label: this.localization("R STICK LEFT")
+                },
+                {
+                    id: 20,
+                    label: this.localization("R STICK RIGHT")
+                },
             ];
         }
         if (["arcade", "mame"].includes(this.getControlScheme())) {
@@ -2810,14 +3701,25 @@ class EmulatorJS {
                 }
             }
         }
-        buttons.push(
-            { id: 24, label: this.localization("QUICK SAVE STATE") },
-            { id: 25, label: this.localization("QUICK LOAD STATE") },
-            { id: 26, label: this.localization("CHANGE STATE SLOT") },
-            { id: 27, label: this.localization("FAST FORWARD") },
-            { id: 29, label: this.localization("SLOW MOTION") },
-            { id: 28, label: this.localization("REWIND") }
-        );
+        buttons.push({
+            id: 24,
+            label: this.localization("QUICK SAVE STATE")
+        }, {
+            id: 25,
+            label: this.localization("QUICK LOAD STATE")
+        }, {
+            id: 26,
+            label: this.localization("CHANGE STATE SLOT")
+        }, {
+            id: 27,
+            label: this.localization("FAST FORWARD")
+        }, {
+            id: 29,
+            label: this.localization("SLOW MOTION")
+        }, {
+            id: 28,
+            label: this.localization("REWIND")
+        });
         let nums = [];
         for (let i = 0; i < buttons.length; i++) {
             nums.push(buttons[i].id);
@@ -3474,288 +4376,1581 @@ class EmulatorJS {
         this.virtualGamepad.classList.add("ejs_virtualGamepad_parent");
         this.elements.parent.appendChild(this.virtualGamepad);
 
-        const speedControlButtons = [
-            { "type": "button", "text": "Fast", "id": "speed_fast", "location": "center", "left": -35, "top": 50, "fontSize": 15, "block": true, "input_value": 27 },
-            { "type": "button", "text": "Slow", "id": "speed_slow", "location": "center", "left": 95, "top": 50, "fontSize": 15, "block": true, "input_value": 29 },
+        const speedControlButtons = [{
+                "type": "button",
+                "text": "Fast",
+                "id": "speed_fast",
+                "location": "center",
+                "left": -35,
+                "top": 50,
+                "fontSize": 15,
+                "block": true,
+                "input_value": 27
+            },
+            {
+                "type": "button",
+                "text": "Slow",
+                "id": "speed_slow",
+                "location": "center",
+                "left": 95,
+                "top": 50,
+                "fontSize": 15,
+                "block": true,
+                "input_value": 29
+            },
         ];
         if (this.rewindEnabled) {
-            speedControlButtons.push({ "type": "button", "text": "Rewind", "id": "speed_rewind", "location": "center", "left": 30, "top": 50, "fontSize": 15, "block": true, "input_value": 28 });
+            speedControlButtons.push({
+                "type": "button",
+                "text": "Rewind",
+                "id": "speed_rewind",
+                "location": "center",
+                "left": 30,
+                "top": 50,
+                "fontSize": 15,
+                "block": true,
+                "input_value": 28
+            });
         }
 
         let info;
         if (this.config.VirtualGamepadSettings && function (set) {
-            if (!Array.isArray(set)) {
-                console.warn("Virtual gamepad settings is not array! Using default gamepad settings");
-                return false;
-            }
-            if (!set.length) {
-                console.warn("Virtual gamepad settings is empty! Using default gamepad settings");
-                return false;
-            }
-            for (let i = 0; i < set.length; i++) {
-                if (!set[i].type) continue;
-                try {
-                    if (set[i].type === "zone" || set[i].type === "dpad") {
-                        if (!set[i].location) {
-                            console.warn("Missing location value for " + set[i].type + "! Using default gamepad settings");
-                            return false;
-                        } else if (!set[i].inputValues) {
-                            console.warn("Missing inputValues for " + set[i].type + "! Using default gamepad settings");
-                            return false;
-                        }
-                        continue;
-                    }
-                    if (!set[i].location) {
-                        console.warn("Missing location value for button " + set[i].text + "! Using default gamepad settings");
-                        return false;
-                    } else if (!set[i].type) {
-                        console.warn("Missing type value for button " + set[i].text + "! Using default gamepad settings");
-                        return false;
-                    } else if (!set[i].id.toString()) {
-                        console.warn("Missing id value for button " + set[i].text + "! Using default gamepad settings");
-                        return false;
-                    } else if (!set[i].input_value.toString()) {
-                        console.warn("Missing input_value for button " + set[i].text + "! Using default gamepad settings");
-                        return false;
-                    }
-                } catch(e) {
-                    console.warn("Error checking values! Using default gamepad settings");
+                if (!Array.isArray(set)) {
+                    console.warn("Virtual gamepad settings is not array! Using default gamepad settings");
                     return false;
                 }
-            }
-            return true;
-        }(this.config.VirtualGamepadSettings)) {
+                if (!set.length) {
+                    console.warn("Virtual gamepad settings is empty! Using default gamepad settings");
+                    return false;
+                }
+                for (let i = 0; i < set.length; i++) {
+                    if (!set[i].type) continue;
+                    try {
+                        if (set[i].type === "zone" || set[i].type === "dpad") {
+                            if (!set[i].location) {
+                                console.warn("Missing location value for " + set[i].type + "! Using default gamepad settings");
+                                return false;
+                            } else if (!set[i].inputValues) {
+                                console.warn("Missing inputValues for " + set[i].type + "! Using default gamepad settings");
+                                return false;
+                            }
+                            continue;
+                        }
+                        if (!set[i].location) {
+                            console.warn("Missing location value for button " + set[i].text + "! Using default gamepad settings");
+                            return false;
+                        } else if (!set[i].type) {
+                            console.warn("Missing type value for button " + set[i].text + "! Using default gamepad settings");
+                            return false;
+                        } else if (!set[i].id.toString()) {
+                            console.warn("Missing id value for button " + set[i].text + "! Using default gamepad settings");
+                            return false;
+                        } else if (!set[i].input_value.toString()) {
+                            console.warn("Missing input_value for button " + set[i].text + "! Using default gamepad settings");
+                            return false;
+                        }
+                    } catch (e) {
+                        console.warn("Error checking values! Using default gamepad settings");
+                        return false;
+                    }
+                }
+                return true;
+            }(this.config.VirtualGamepadSettings)) {
             info = this.config.VirtualGamepadSettings;
         } else if ("gba" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "B", "id": "b", "location": "right", "left": 10, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "A", "id": "a", "location": "right", "left": 81, "top": 40, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "top": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 },
-                { "type": "button", "text": "L", "id": "l", "location": "left", "left": 3, "top": -90, "bold": true, "block": true, "input_value": 10 },
-                { "type": "button", "text": "R", "id": "r", "location": "right", "right": 3, "top": -90, "bold": true, "block": true, "input_value": 11 }
+            info = [{
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "left": 10,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "left": 81,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "top": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                },
+                {
+                    "type": "button",
+                    "text": "L",
+                    "id": "l",
+                    "location": "left",
+                    "left": 3,
+                    "top": -90,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "R",
+                    "id": "r",
+                    "location": "right",
+                    "right": 3,
+                    "top": -90,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 11
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("gb" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "A", "id": "a", "location": "right", "left": 81, "top": 40, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "left": 10, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "top": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 }
+            info = [{
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "left": 81,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "left": 10,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "top": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("nes" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "B", "id": "b", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "A", "id": "a", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 }
+            info = [{
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("n64" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "B", "id": "b", "location": "right", "left": -10, "top": 95, "input_value": 1, "bold": true },
-                { "type": "button", "text": "A", "id": "a", "location": "right", "left": 40, "top": 150, "input_value": 0, "bold": true },
-                { "type": "zone", "id": "stick", "location": "left", "left": "50%", "top": "100%", "joystickInput": true, "inputValues": [16, 17, 18, 19] },
-                { "type": "zone", "id": "dpad", "location": "left", "left": "50%", "top": "0%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 30, "top": -10, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "L", "id": "l", "block": true, "location": "top", "left": 10, "top": -40, "bold": true, "input_value": 10 },
-                { "type": "button", "text": "R", "id": "r", "block": true, "location": "top", "right": 10, "top": -40, "bold": true, "input_value": 11 },
-                { "type": "button", "text": "Z", "id": "z", "block": true, "location": "top", "left": 10, "bold": true, "input_value": 12 },
-                { "fontSize": 20, "type": "button", "text": "CU", "id": "cu", "joystickInput": true, "location": "right", "left": 25, "top": -65, "input_value": 23 },
-                { "fontSize": 20, "type": "button", "text": "CD", "id": "cd", "joystickInput": true, "location": "right", "left": 25, "top": 15, "input_value": 22 },
-                { "fontSize": 20, "type": "button", "text": "CL", "id": "cl", "joystickInput": true, "location": "right", "left": -15, "top": -25, "input_value": 21 },
-                { "fontSize": 20, "type": "button", "text": "CR", "id": "cr", "joystickInput": true, "location": "right", "left": 65, "top": -25, "input_value": 20 }
+            info = [{
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "left": -10,
+                    "top": 95,
+                    "input_value": 1,
+                    "bold": true
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "left": 40,
+                    "top": 150,
+                    "input_value": 0,
+                    "bold": true
+                },
+                {
+                    "type": "zone",
+                    "id": "stick",
+                    "location": "left",
+                    "left": "50%",
+                    "top": "100%",
+                    "joystickInput": true,
+                    "inputValues": [16, 17, 18, 19]
+                },
+                {
+                    "type": "zone",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "top": "0%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 30,
+                    "top": -10,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "L",
+                    "id": "l",
+                    "block": true,
+                    "location": "top",
+                    "left": 10,
+                    "top": -40,
+                    "bold": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "R",
+                    "id": "r",
+                    "block": true,
+                    "location": "top",
+                    "right": 10,
+                    "top": -40,
+                    "bold": true,
+                    "input_value": 11
+                },
+                {
+                    "type": "button",
+                    "text": "Z",
+                    "id": "z",
+                    "block": true,
+                    "location": "top",
+                    "left": 10,
+                    "bold": true,
+                    "input_value": 12
+                },
+                {
+                    "fontSize": 20,
+                    "type": "button",
+                    "text": "CU",
+                    "id": "cu",
+                    "joystickInput": true,
+                    "location": "right",
+                    "left": 25,
+                    "top": -65,
+                    "input_value": 23
+                },
+                {
+                    "fontSize": 20,
+                    "type": "button",
+                    "text": "CD",
+                    "id": "cd",
+                    "joystickInput": true,
+                    "location": "right",
+                    "left": 25,
+                    "top": 15,
+                    "input_value": 22
+                },
+                {
+                    "fontSize": 20,
+                    "type": "button",
+                    "text": "CL",
+                    "id": "cl",
+                    "joystickInput": true,
+                    "location": "right",
+                    "left": -15,
+                    "top": -25,
+                    "input_value": 21
+                },
+                {
+                    "fontSize": 20,
+                    "type": "button",
+                    "text": "CR",
+                    "id": "cr",
+                    "joystickInput": true,
+                    "location": "right",
+                    "left": 65,
+                    "top": -25,
+                    "input_value": 20
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("nds" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "X", "id": "x", "location": "right", "left": 40, "bold": true, "input_value": 9 },
-                { "type": "button", "text": "Y", "id": "y", "location": "right", "top": 40, "bold": true, "input_value": 1 },
-                { "type": "button", "text": "A", "id": "a", "location": "right", "left": 81, "top": 40, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "left": 40, "top": 80, "bold": true, "input_value": 0 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "top": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 },
-                { "type": "button", "text": "L", "id": "l", "location": "left", "left": 3, "top": -100, "bold": true, "block": true, "input_value": 10 },
-                { "type": "button", "text": "R", "id": "r", "location": "right", "right": 3, "top": -100, "bold": true, "block": true, "input_value": 11 }
+            info = [{
+                    "type": "button",
+                    "text": "X",
+                    "id": "x",
+                    "location": "right",
+                    "left": 40,
+                    "bold": true,
+                    "input_value": 9
+                },
+                {
+                    "type": "button",
+                    "text": "Y",
+                    "id": "y",
+                    "location": "right",
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 1
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "left": 81,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "left": 40,
+                    "top": 80,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "top": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                },
+                {
+                    "type": "button",
+                    "text": "L",
+                    "id": "l",
+                    "location": "left",
+                    "left": 3,
+                    "top": -100,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "R",
+                    "id": "r",
+                    "location": "right",
+                    "right": 3,
+                    "top": -100,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 11
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("snes" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "X", "id": "x", "location": "right", "left": 40, "bold": true, "input_value": 9 },
-                { "type": "button", "text": "Y", "id": "y", "location": "right", "top": 40, "bold": true, "input_value": 1 },
-                { "type": "button", "text": "A", "id": "a", "location": "right", "left": 81, "top": 40, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "left": 40, "top": 80, "bold": true, "input_value": 0 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "top": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 },
-                { "type": "button", "text": "L", "id": "l", "location": "left", "left": 3, "top": -100, "bold": true, "block": true, "input_value": 10 },
-                { "type": "button", "text": "R", "id": "r", "location": "right", "right": 3, "top": -100, "bold": true, "block": true, "input_value": 11 }
+            info = [{
+                    "type": "button",
+                    "text": "X",
+                    "id": "x",
+                    "location": "right",
+                    "left": 40,
+                    "bold": true,
+                    "input_value": 9
+                },
+                {
+                    "type": "button",
+                    "text": "Y",
+                    "id": "y",
+                    "location": "right",
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 1
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "left": 81,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "left": 40,
+                    "top": 80,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "top": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                },
+                {
+                    "type": "button",
+                    "text": "L",
+                    "id": "l",
+                    "location": "left",
+                    "left": 3,
+                    "top": -100,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "R",
+                    "id": "r",
+                    "location": "right",
+                    "right": 3,
+                    "top": -100,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 11
+                }
             ];
             info.push(...speedControlButtons);
         } else if (["segaMD", "segaCD", "sega32x"].includes(this.getControlScheme())) {
-            info = [
-                { "type": "button", "text": "A", "id": "a", "location": "right", "right": 145, "top": 70, "bold": true, "input_value": 1 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "C", "id": "c", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "X", "id": "x", "location": "right", "right": 145, "top": 0, "bold": true, "input_value": 10 },
-                { "type": "button", "text": "Y", "id": "y", "location": "right", "right": 75, "top": 0, "bold": true, "input_value": 9 },
-                { "type": "button", "text": "Z", "id": "z", "location": "right", "right": 5, "top": 0, "bold": true, "input_value": 11 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Mode", "id": "mode", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 }
+            info = [{
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "right": 145,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 1
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "C",
+                    "id": "c",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "X",
+                    "id": "x",
+                    "location": "right",
+                    "right": 145,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "Y",
+                    "id": "y",
+                    "location": "right",
+                    "right": 75,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 9
+                },
+                {
+                    "type": "button",
+                    "text": "Z",
+                    "id": "z",
+                    "location": "right",
+                    "right": 5,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 11
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Mode",
+                    "id": "mode",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("segaMS" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "1", "id": "button_1", "location": "right", "left": 10, "top": 40, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "2", "id": "button_2", "location": "right", "left": 81, "top": 40, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] }
+            info = [{
+                    "type": "button",
+                    "text": "1",
+                    "id": "button_1",
+                    "location": "right",
+                    "left": 10,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "2",
+                    "id": "button_2",
+                    "location": "right",
+                    "left": 81,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("segaGG" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "1", "id": "button_1", "location": "right", "left": 10, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "2", "id": "button_2", "location": "right", "left": 81, "top": 40, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "top": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 30, "fontSize": 15, "block": true, "input_value": 3 }
+            info = [{
+                    "type": "button",
+                    "text": "1",
+                    "id": "button_1",
+                    "location": "right",
+                    "left": 10,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "2",
+                    "id": "button_2",
+                    "location": "right",
+                    "left": 81,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "top": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 30,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("segaSaturn" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "A", "id": "a", "location": "right", "right": 145, "top": 70, "bold": true, "input_value": 1 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "C", "id": "c", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "X", "id": "x", "location": "right", "right": 145, "top": 0, "bold": true, "input_value": 9 },
-                { "type": "button", "text": "Y", "id": "y", "location": "right", "right": 75, "top": 0, "bold": true, "input_value": 10 },
-                { "type": "button", "text": "Z", "id": "z", "location": "right", "right": 5, "top": 0, "bold": true, "input_value": 11 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "L", "id": "l", "location": "left", "left": 3, "top": -90, "bold": true, "block": true, "input_value": 12 },
-                { "type": "button", "text": "R", "id": "r", "location": "right", "right": 3, "top": -90, "bold": true, "block": true, "input_value": 13 },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 30, "fontSize": 15, "block": true, "input_value": 3 }
+            info = [{
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "right": 145,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 1
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "C",
+                    "id": "c",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "X",
+                    "id": "x",
+                    "location": "right",
+                    "right": 145,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 9
+                },
+                {
+                    "type": "button",
+                    "text": "Y",
+                    "id": "y",
+                    "location": "right",
+                    "right": 75,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "Z",
+                    "id": "z",
+                    "location": "right",
+                    "right": 5,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 11
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "L",
+                    "id": "l",
+                    "location": "left",
+                    "left": 3,
+                    "top": -90,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 12
+                },
+                {
+                    "type": "button",
+                    "text": "R",
+                    "id": "r",
+                    "location": "right",
+                    "right": 3,
+                    "top": -90,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 13
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 30,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("atari2600" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "", "id": "button_1", "location": "right", "right": 10, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Reset", "id": "reset", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 }
+            info = [{
+                    "type": "button",
+                    "text": "",
+                    "id": "button_1",
+                    "location": "right",
+                    "right": 10,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Reset",
+                    "id": "reset",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("atari7800" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "1", "id": "button_1", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "2", "id": "button_2", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Reset", "id": "reset", "location": "center", "left": -35, "fontSize": 15, "block": true, "input_value": 9 },
-                { "type": "button", "text": "Pause", "id": "pause", "location": "center", "left": 95, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": 30, "fontSize": 15, "block": true, "input_value": 2 },
+            info = [{
+                    "type": "button",
+                    "text": "1",
+                    "id": "button_1",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "2",
+                    "id": "button_2",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Reset",
+                    "id": "reset",
+                    "location": "center",
+                    "left": -35,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 9
+                },
+                {
+                    "type": "button",
+                    "text": "Pause",
+                    "id": "pause",
+                    "location": "center",
+                    "left": 95,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": 30,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                },
             ];
             info.push(...speedControlButtons);
         } else if ("lynx" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "B", "id": "button_1", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "A", "id": "button_2", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Opt 1", "id": "option_1", "location": "center", "left": -35, "fontSize": 15, "block": true, "input_value": 10 },
-                { "type": "button", "text": "Opt 2", "id": "option_2", "location": "center", "left": 95, "fontSize": 15, "block": true, "input_value": 11 },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 30, "fontSize": 15, "block": true, "input_value": 3 }
+            info = [{
+                    "type": "button",
+                    "text": "B",
+                    "id": "button_1",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "button_2",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Opt 1",
+                    "id": "option_1",
+                    "location": "center",
+                    "left": -35,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "Opt 2",
+                    "id": "option_2",
+                    "location": "center",
+                    "left": 95,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 11
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 30,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("jaguar" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "A", "id": "a", "location": "right", "right": 145, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "C", "id": "c", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 1 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Option", "id": "option", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Pause", "id": "pause", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 }
+            info = [{
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "right": 145,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "C",
+                    "id": "c",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 1
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Option",
+                    "id": "option",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Pause",
+                    "id": "pause",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("vb" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "B", "id": "b", "location": "right", "right": 75, "top": 150, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "A", "id": "a", "location": "right", "right": 5, "top": 150, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "left_dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "dpad", "id": "right_dpad", "location": "right", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [19, 18, 17, 16] },
-                { "type": "button", "text": "L", "id": "l", "location": "left", "left": 3, "top": -90, "bold": true, "block": true, "input_value": 10 },
-                { "type": "button", "text": "R", "id": "r", "location": "right", "right": 3, "top": -90, "bold": true, "block": true, "input_value": 11 },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 }
+            info = [{
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "right": 75,
+                    "top": 150,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "right": 5,
+                    "top": 150,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "left_dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "dpad",
+                    "id": "right_dpad",
+                    "location": "right",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [19, 18, 17, 16]
+                },
+                {
+                    "type": "button",
+                    "text": "L",
+                    "id": "l",
+                    "location": "left",
+                    "left": 3,
+                    "top": -90,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "R",
+                    "id": "r",
+                    "location": "right",
+                    "right": 3,
+                    "top": -90,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 11
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("3do" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "A", "id": "a", "location": "right", "right": 145, "top": 70, "bold": true, "input_value": 1 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "C", "id": "c", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "L", "id": "l", "location": "left", "left": 3, "top": -90, "bold": true, "block": true, "input_value": 10 },
-                { "type": "button", "text": "R", "id": "r", "location": "right", "right": 3, "top": -90, "bold": true, "block": true, "input_value": 11 },
-                { "type": "button", "text": "X", "id": "x", "location": "center", "left": -5, "fontSize": 15, "block": true, "bold": true, "input_value": 2 },
-                { "type": "button", "text": "P", "id": "p", "location": "center", "left": 60, "fontSize": 15, "block": true, "bold": true, "input_value": 3 }
+            info = [{
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "right": 145,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 1
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "C",
+                    "id": "c",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "L",
+                    "id": "l",
+                    "location": "left",
+                    "left": 3,
+                    "top": -90,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "R",
+                    "id": "r",
+                    "location": "right",
+                    "right": 3,
+                    "top": -90,
+                    "bold": true,
+                    "block": true,
+                    "input_value": 11
+                },
+                {
+                    "type": "button",
+                    "text": "X",
+                    "id": "x",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "bold": true,
+                    "input_value": 2
+                },
+                {
+                    "type": "button",
+                    "text": "P",
+                    "id": "p",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "bold": true,
+                    "input_value": 3
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("pce" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "II", "id": "ii", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "I", "id": "i", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Run", "id": "run", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 }
+            info = [{
+                    "type": "button",
+                    "text": "II",
+                    "id": "ii",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "I",
+                    "id": "i",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Run",
+                    "id": "run",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("ngp" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "A", "id": "a", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "right": 5, "top": 50, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Option", "id": "option", "location": "center", "left": 30, "fontSize": 15, "block": true, "input_value": 3 }
+            info = [{
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "right": 5,
+                    "top": 50,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Option",
+                    "id": "option",
+                    "location": "center",
+                    "left": 30,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("ws" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "B", "id": "b", "location": "right", "right": 75, "top": 150, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "A", "id": "a", "location": "right", "right": 5, "top": 150, "bold": true, "input_value": 8 },
-                { "type": "dpad", "id": "x_dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "dpad", "id": "y_dpad", "location": "right", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [13, 12, 10, 11] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 30, "fontSize": 15, "block": true, "input_value": 3 },
+            info = [{
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "right": 75,
+                    "top": 150,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "right": 5,
+                    "top": 150,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "dpad",
+                    "id": "x_dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "dpad",
+                    "id": "y_dpad",
+                    "location": "right",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [13, 12, 10, 11]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 30,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
             ];
             info.push(...speedControlButtons);
         } else if ("coleco" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "L", "id": "l", "location": "right", "left": 10, "top": 40, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "R", "id": "r", "location": "right", "left": 81, "top": 40, "bold": true, "input_value": 0 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] }
+            info = [{
+                    "type": "button",
+                    "text": "L",
+                    "id": "l",
+                    "location": "right",
+                    "left": 10,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "R",
+                    "id": "r",
+                    "location": "right",
+                    "left": 81,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                }
             ];
             info.push(...speedControlButtons);
         } else if ("pcfx" === this.getControlScheme()) {
-            info = [
-                { "type": "button", "text": "I", "id": "i", "location": "right", "right": 5, "top": 70, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "II", "id": "ii", "location": "right", "right": 75, "top": 70, "bold": true, "input_value": 0 },
-                { "type": "button", "text": "III", "id": "iii", "location": "right", "right": 145, "top": 70, "bold": true, "input_value": 9 },
-                { "type": "button", "text": "IV", "id": "iv", "location": "right", "right": 5, "top": 0, "bold": true, "input_value": 1 },
-                { "type": "button", "text": "V", "id": "v", "location": "right", "right": 75, "top": 0, "bold": true, "input_value": 10 },
-                { "type": "button", "text": "VI", "id": "vi", "location": "right", "right": 145, "top": 0, "bold": true, "input_value": 11 },
-                { "type": "dpad", "id": "dpad", "location": "left", "left": "50%", "right": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 },
-                { "type": "button", "text": "Run", "id": "run", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 }
+            info = [{
+                    "type": "button",
+                    "text": "I",
+                    "id": "i",
+                    "location": "right",
+                    "right": 5,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "II",
+                    "id": "ii",
+                    "location": "right",
+                    "right": 75,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "button",
+                    "text": "III",
+                    "id": "iii",
+                    "location": "right",
+                    "right": 145,
+                    "top": 70,
+                    "bold": true,
+                    "input_value": 9
+                },
+                {
+                    "type": "button",
+                    "text": "IV",
+                    "id": "iv",
+                    "location": "right",
+                    "right": 5,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 1
+                },
+                {
+                    "type": "button",
+                    "text": "V",
+                    "id": "v",
+                    "location": "right",
+                    "right": 75,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 10
+                },
+                {
+                    "type": "button",
+                    "text": "VI",
+                    "id": "vi",
+                    "location": "right",
+                    "right": 145,
+                    "top": 0,
+                    "bold": true,
+                    "input_value": 11
+                },
+                {
+                    "type": "dpad",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "right": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                },
+                {
+                    "type": "button",
+                    "text": "Run",
+                    "id": "run",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                }
             ];
             info.push(...speedControlButtons);
         } else {
-            info = [
-                { "type": "button", "text": "Y", "id": "y", "location": "right", "left": 40, "bold": true, "input_value": 9 },
-                { "type": "button", "text": "X", "id": "x", "location": "right", "top": 40, "bold": true, "input_value": 1 },
-                { "type": "button", "text": "B", "id": "b", "location": "right", "left": 81, "top": 40, "bold": true, "input_value": 8 },
-                { "type": "button", "text": "A", "id": "a", "location": "right", "left": 40, "top": 80, "bold": true, "input_value": 0 },
-                { "type": "zone", "id": "dpad", "location": "left", "left": "50%", "top": "50%", "joystickInput": false, "inputValues": [4, 5, 6, 7] },
-                { "type": "button", "text": "Start", "id": "start", "location": "center", "left": 60, "fontSize": 15, "block": true, "input_value": 3 },
-                { "type": "button", "text": "Select", "id": "select", "location": "center", "left": -5, "fontSize": 15, "block": true, "input_value": 2 }
+            info = [{
+                    "type": "button",
+                    "text": "Y",
+                    "id": "y",
+                    "location": "right",
+                    "left": 40,
+                    "bold": true,
+                    "input_value": 9
+                },
+                {
+                    "type": "button",
+                    "text": "X",
+                    "id": "x",
+                    "location": "right",
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 1
+                },
+                {
+                    "type": "button",
+                    "text": "B",
+                    "id": "b",
+                    "location": "right",
+                    "left": 81,
+                    "top": 40,
+                    "bold": true,
+                    "input_value": 8
+                },
+                {
+                    "type": "button",
+                    "text": "A",
+                    "id": "a",
+                    "location": "right",
+                    "left": 40,
+                    "top": 80,
+                    "bold": true,
+                    "input_value": 0
+                },
+                {
+                    "type": "zone",
+                    "id": "dpad",
+                    "location": "left",
+                    "left": "50%",
+                    "top": "50%",
+                    "joystickInput": false,
+                    "inputValues": [4, 5, 6, 7]
+                },
+                {
+                    "type": "button",
+                    "text": "Start",
+                    "id": "start",
+                    "location": "center",
+                    "left": 60,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 3
+                },
+                {
+                    "type": "button",
+                    "text": "Select",
+                    "id": "select",
+                    "location": "center",
+                    "left": -5,
+                    "fontSize": 15,
+                    "block": true,
+                    "input_value": 2
+                }
             ];
             info.push(...speedControlButtons);
         }
@@ -3774,7 +5969,12 @@ class EmulatorJS {
         left.classList.add("ejs_virtualGamepad_left");
         const right = this.createElement("div");
         right.classList.add("ejs_virtualGamepad_right");
-        const elems = { top: up, center: down, left, right };
+        const elems = {
+            top: up,
+            center: down,
+            left,
+            right
+        };
 
         this.virtualGamepad.appendChild(up);
         this.virtualGamepad.appendChild(down);
@@ -3804,6 +6004,7 @@ class EmulatorJS {
                     info[i].left = amnt.right;
                 }
             }
+        // 设置虚拟按键样式
             let style = "";
             if (info[i].left) {
                 style += "left:" + info[i].left + (typeof info[i].left === "number" ? "px" : "") + ";";
@@ -4019,7 +6220,8 @@ class EmulatorJS {
                 const degree = info.angle.degree;
                 const distance = info.distance;
                 if (zone.joystickInput === true) {
-                    let x = 0, y = 0;
+                    let x = 0,
+                        y = 0;
                     if (degree > 0 && degree <= 45) {
                         x = distance / 50;
                         y = -0.022222222222222223 * degree * distance / 50;
@@ -4198,7 +6400,7 @@ class EmulatorJS {
                 if (coreSpecific && coreSpecific.settings) {
                     return coreSpecific.settings[setting];
                 }
-            } catch(e) {
+            } catch (e) {
                 console.warn("Could not load previous settings", e);
             }
         }
@@ -4235,7 +6437,7 @@ class EmulatorJS {
                     rv += `${k} = ${value}\n`;
                 }
                 return rv;
-            } catch(e) {
+            } catch (e) {
                 console.warn("Could not load previous settings", e);
             }
         }
@@ -4269,7 +6471,7 @@ class EmulatorJS {
                     this.cheats.push(cheat);
                 }
 
-            } catch(e) {
+            } catch (e) {
                 console.warn("Could not load previous settings", e);
             }
         }
@@ -4280,7 +6482,7 @@ class EmulatorJS {
                 this.volume = ejs_settings.volume;
                 this.muted = ejs_settings.muted;
                 this.setVolume(this.muted ? 0 : this.volume);
-            } catch(e) {
+            } catch (e) {
                 console.warn("Could not load previous settings", e);
             }
         }
@@ -4365,6 +6567,8 @@ class EmulatorJS {
             this.gameManager.setAltKeyEnabled(value === "enabled");
         } else if (option === "lockMouse") {
             this.enableMouseLock = (value === "enabled");
+        } else if (option === "overlays") { //设置项为"遮罩"时执行方法
+            this.setOverlays(value);
         }
     }
     menuOptionChanged(option, value) {
@@ -4484,15 +6688,16 @@ class EmulatorJS {
                 optionButton.classList.add("ejs_option_row");
                 optionButton.classList.add("ejs_button_style");
 
+            //为菜单选项按钮绑定点击事件
                 this.addEventListener(optionButton, "click", (e) => {
-                    this.disks[id] = opt;
+                    this.disks[id] = opt; // 设置或更新与该选项关联的值
                     for (let j = 0; j < buttons.length; j++) {
-                        buttons[j].classList.remove("ejs_option_row_selected");
+                        buttons[j].classList.remove("ejs_option_row_selected"); // 移除所有选项的选择状态
                     }
-                    optionButton.classList.add("ejs_option_row_selected");
-                    this.menuOptionChanged(id, opt);
-                    current.innerText = opts[opt];
-                    goToHome();
+                    optionButton.classList.add("ejs_option_row_selected"); // 给当前选中的选项添加选择状态
+                    this.menuOptionChanged(id, opt); // 通知选项更改
+                    current.innerText = opts[opt]; // 更新菜单上显示的文字为当前选项的文本
+                    goToHome(); // 执行返回主页的操作
                 })
                 if (defaultOption === opt) {
                     optionButton.classList.add("ejs_option_row_selected");
@@ -4517,7 +6722,9 @@ class EmulatorJS {
             let isM3U = false;
             let disks = {};
             if (this.fileName.split(".").pop() === "m3u") {
-                disks = this.gameManager.Module.FS.readFile(this.fileName, { encoding: "utf8" }).split("\n");
+                disks = this.gameManager.Module.FS.readFile(this.fileName, {
+                    encoding: "utf8"
+                }).split("\n");
                 isM3U = true;
             }
             for (let i = 0; i < this.gameManager.getDiskCount(); i++) {
@@ -4637,7 +6844,7 @@ class EmulatorJS {
                 pageTitle.innerText = title;
                 pageTitle.classList.add("ejs_menu_text_a");
                 button.appendChild(pageTitle);
-                
+
                 // const optionsMenu = this.createElement("div");
                 // optionsMenu.classList.add("ejs_setting_menu");
                 // menu.appendChild(optionsMenu);
@@ -4826,7 +7033,7 @@ class EmulatorJS {
             }, this.config.threads ? "enabled" : "disabled", home);
         }
 
-        const graphicsOptions = createSettingParent(true, "Graphics Settings", home);
+        const graphicsOptions = createSettingParent(true, this.localization("Graphics Settings"), home);
 
         if (this.config.shaders) {
             const builtinShaders = {
@@ -4883,7 +7090,8 @@ class EmulatorJS {
         }, this.videoRotation.toString(), graphicsOptions, true);
 
         const screenCaptureOptions = createSettingParent(true, "Screen Capture", home);
-
+        
+        //添加"遮罩"选项
         addToMenu(this.localization("Screenshot Source"), "screenshotSource", {
             "canvas": "canvas",
             "retroarch": "retroarch"
@@ -4894,8 +7102,8 @@ class EmulatorJS {
             "jpeg": "jpeg",
             "webp": "webp"
         }
-        if (this.isSafari) {  
-            delete screenshotFormats["webp"]; 
+        if (this.isSafari) {
+            delete screenshotFormats["webp"];
         }
         if (!(this.capture.photo.format in screenshotFormats)) {
             this.capture.photo.format = "png";
@@ -4978,7 +7186,7 @@ class EmulatorJS {
 
         checkForEmptyMenu(screenCaptureOptions);
 
-        const speedOptions = createSettingParent(true, "Speed Options", home);
+        const speedOptions = createSettingParent(true, this.localization("Speed Options"), home);
 
         addToMenu(this.localization("Fast Forward"), "fastForward", {
             "enabled": this.localization("Enabled"),
@@ -5034,7 +7242,7 @@ class EmulatorJS {
         checkForEmptyMenu(inputOptions);
 
         if (this.saveInBrowserSupported()) {
-            const saveStateOpts = createSettingParent(true, "Save States", home);
+            const saveStateOpts = createSettingParent(true, this.localization("Save State Slot"), home);
             addToMenu(this.localization("Save State Slot"), "save-state-slot", ["1", "2", "3", "4", "5", "6", "7", "8", "9"], "1", saveStateOpts, true);
             addToMenu(this.localization("Save State Location"), "save-state-location", {
                 "download": this.localization("Download"),
@@ -5053,7 +7261,7 @@ class EmulatorJS {
         }
 
         if (this.touch || this.hasTouchScreen) {
-            const virtualGamepad = createSettingParent(true, "Virtual Gamepad", home);
+            const virtualGamepad = createSettingParent(true, this.localization("Virtual Gamepad"), home);
             addToMenu(this.localization("Virtual Gamepad"), "virtual-gamepad", {
                 "enabled": this.localization("Enabled"),
                 "disabled": this.localization("Disabled")
@@ -5072,9 +7280,9 @@ class EmulatorJS {
         let coreOpts;
         try {
             coreOpts = this.gameManager.getCoreOptions();
-        } catch(e) {}
+        } catch (e) {}
         if (coreOpts) {
-            const coreOptions = createSettingParent(true, "Backend Core Options", home);
+            const coreOptions = createSettingParent(true, this.localization("Backend Core Options"), home);
             coreOpts.split("\n").forEach((line, index) => {
                 let option = line.split("; ");
                 let name = option[0];
@@ -5292,7 +7500,7 @@ class EmulatorJS {
     }
     defineNetplayFunctions() {
         function guidGenerator() {
-            const S4 = function() {
+            const S4 = function () {
                 return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
             };
             return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
@@ -5340,7 +7548,7 @@ class EmulatorJS {
             //console.log(open);
             this.netplay.table.innerHTML = "";
             for (const k in open) {
-                addToTable(k, open[k].room_name, open[k].current, open[k].max);//todo: password
+                addToTable(k, open[k].room_name, open[k].current, open[k].max); //todo: password
             }
         }
         this.netplay.showOpenRoomDialog = () => {
@@ -5488,7 +7696,7 @@ class EmulatorJS {
 
             this.netplay.startSocketIO((error) => {
                 this.netplay.socket.emit("join-room", {
-                    extra: this.netplay.extra//,
+                    extra: this.netplay.extra //,
                     //password: password
                 }, (error, users) => {
                     if (error) {
@@ -5639,7 +7847,9 @@ class EmulatorJS {
                 this.netplay.setLoading(true);
                 this.pause(true);
                 this.gameManager.loadState(new Uint8Array(data.state));
-                this.netplay.sendMessage({ ready: true });
+                this.netplay.sendMessage({
+                    ready: true
+                });
             }
             if (data.play && !this.owner) {
                 this.play(true);
@@ -5650,7 +7860,9 @@ class EmulatorJS {
             if (data.ready && this.netplay.owner) {
                 this.netplay.ready++;
                 if (this.netplay.ready === this.netplay.getUserCount()) {
-                    this.netplay.sendMessage({ readyready: true });
+                    this.netplay.sendMessage({
+                        readyready: true
+                    });
                     this.netplay.reset();
                     setTimeout(() => this.play(true), 48);
                     this.netplay.setLoading(false);
@@ -5697,7 +7909,9 @@ class EmulatorJS {
                             this.play(true);
                         }
                         if (frame + 10 <= inFrame && inFrame > this.netplay.init_frame + 100) {
-                            this.netplay.sendMessage({ shortPause: this.netplay.playerID });
+                            this.netplay.sendMessage({
+                                shortPause: this.netplay.playerID
+                            });
                         }
                     }
                 });
@@ -5758,8 +7972,12 @@ class EmulatorJS {
                 this.netplay.inputsData[i] ? this.netplay.inputsData[i].forEach((value) => {
                     value.frame += 10;
                     to_send.push(value);
-                }) : to_send.push({ frame: i + 10 });
-                this.netplay.sendMessage({ "sync-control": to_send });
+                }) : to_send.push({
+                    frame: i + 10
+                });
+                this.netplay.sendMessage({
+                    "sync-control": to_send
+                });
             } else {
                 if (this.netplay.currentFrame <= 0 || this.netplay.inputsData[this.netplay.currentFrame]) {
                     this.netplay.wait = false;
@@ -5772,7 +7990,9 @@ class EmulatorJS {
                 } else if (!this.netplay.syncing) {
                     console.log("sync");
                     this.pause(true);
-                    this.netplay.sendMessage({ sync: true });
+                    this.netplay.sendMessage({
+                        sync: true
+                    });
                     this.netplay.syncing = true;
                 }
             }
@@ -5940,7 +8160,7 @@ class EmulatorJS {
         if (!this.gameManager) return;
         try {
             this.Module.FS.unlink("/shader/shader.glslp");
-        } catch(e) {}
+        } catch (e) {}
 
         if (name === "disabled" || !this.config.shaders[name]) {
             this.gameManager.toggleShader(0);
@@ -5978,7 +8198,7 @@ class EmulatorJS {
         let scaleHeight = imageUpscale;
         let scaleWidth = imageUpscale;
         let scale = 1;
-        
+
         if (screenshotSource === "retroarch") {
             if (width >= height) {
                 width = height * aspectRatio;
@@ -5986,7 +8206,9 @@ class EmulatorJS {
                 height = width / aspectRatio;
             }
             this.gameManager.screenshot().then(screenshot => {
-                const blob = new Blob([screenshot], { type: "image/png" });
+                const blob = new Blob([screenshot], {
+                    type: "image/png"
+                });
                 if (imageUpscale === 0) {
                     callback(blob, "png");
                 } else if (imageUpscale > 1) {
@@ -5998,7 +8220,9 @@ class EmulatorJS {
                         const canvas = document.createElement("canvas");
                         canvas.width = width * scale;
                         canvas.height = height * scale;
-                        const ctx = canvas.getContext("2d", { alpha: false });
+                        const ctx = canvas.getContext("2d", {
+                            alpha: false
+                        });
                         ctx.imageSmoothingEnabled = false;
                         ctx.scale(scaleWidth, scaleHeight);
                         ctx.drawImage(img, 0, 0, width, height);
@@ -6017,9 +8241,9 @@ class EmulatorJS {
             } else if (width < height && !videoTurned) {
                 height = width / aspectRatio;
             } else if (width >= height && videoTurned) {
-                width = height * (1/aspectRatio);
+                width = height * (1 / aspectRatio);
             } else if (width < height && videoTurned) {
-                width = height / (1/aspectRatio);
+                width = height / (1 / aspectRatio);
             }
             if (imageUpscale === 0) {
                 scale = gameHeight / height;
@@ -6032,7 +8256,9 @@ class EmulatorJS {
             captureCanvas.width = width * scale;
             captureCanvas.height = height * scale;
             captureCanvas.style.display = "none";
-            const captureCtx = captureCanvas.getContext("2d", { alpha: false });
+            const captureCtx = captureCanvas.getContext("2d", {
+                alpha: false
+            });
             captureCtx.imageSmoothingEnabled = false;
             captureCtx.scale(scale, scale);
             const imageAspect = this.canvas.width / this.canvas.height;
@@ -6059,7 +8285,10 @@ class EmulatorJS {
     async takeScreenshot(source, format, upscale) {
         return new Promise((resolve) => {
             this.screenshot((blob, format) => {
-                resolve({ blob, format });
+                resolve({
+                    blob,
+                    format
+                });
             }, source, format, upscale);
         });
     }
@@ -6123,7 +8352,9 @@ class EmulatorJS {
         let offsetY = 0;
 
         const captureCanvas = document.createElement("canvas");
-        const captureCtx = captureCanvas.getContext("2d", { alpha: false });
+        const captureCtx = captureCanvas.getContext("2d", {
+            alpha: false
+        });
         captureCtx.fillStyle = "#000";
         captureCtx.imageSmoothingEnabled = false;
         const updateSize = () => {
@@ -6135,9 +8366,9 @@ class EmulatorJS {
             } else if (width < height && !videoTurned) {
                 height = width / aspectRatio;
             } else if (width >= height && videoTurned) {
-                width = height * (1/aspectRatio);
+                width = height * (1 / aspectRatio);
             } else if (width < height && videoTurned) {
-                width = height / (1/aspectRatio);
+                width = height / (1 / aspectRatio);
             }
             canvasAspect = width / height;
             captureCanvas.width = width * captureUpscale;
