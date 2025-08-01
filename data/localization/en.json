@@ -103,6 +103,9 @@
     "Virtual Gamepad": "Virtual Gamepad",
     "Backend Core Options": "Backend Core Options",
     "Graphics Settings": "Graphics Settings",
+    "Screen Capture": "Screen Capture",
+    "Overlays": "Overlays",
+    "Input Options": "Input Options",
     "Disk": "Disk",
     "Press Keyboard": "Press Keyboard",
     "INSERT COIN": "INSERT COIN",
@@ -338,5 +341,8 @@
     "System Save interval": "System Save interval",
     "Menu Bar Button": "Menu Bar Button",
     "visible": "visible",
-    "hidden": "hidden"
+    "hidden": "hidden",
+    "seconds": "秒",
+    "minute": "分钟",
+    "minutes": "分钟"
 }

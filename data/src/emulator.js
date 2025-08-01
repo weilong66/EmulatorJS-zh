@@ -7089,9 +7089,16 @@ class EmulatorJS {
             "3": "270 deg"
         }, this.videoRotation.toString(), graphicsOptions, true);
 
-        const screenCaptureOptions = createSettingParent(true, "Screen Capture", home);
+        const screenCaptureOptions = createSettingParent(true, this.localization("Screen Capture"), home);
         
         //添加"遮罩"选项
+        addToMenu(this.localization("Overlays"), 'overlays', {
+            'disabled': this.localization("Disabled"),
+            'small': this.localization("Small"),
+            'gba': this.localization("GBA"),
+            'nds': this.localization("NDS")
+        }, "disabled", graphicsOptions, true);
+
         addToMenu(this.localization("Screenshot Source"), "screenshotSource", {
             "canvas": "canvas",
             "retroarch": "retroarch"
@@ -7217,7 +7224,7 @@ class EmulatorJS {
             ], "6", speedOptions, true);
         }
 
-        const inputOptions = createSettingParent(true, "Input Options", home);
+        const inputOptions = createSettingParent(true, this.localization("Input Options"), home);
 
         addToMenu(this.localization("Menubar Mouse Trigger"), "menubarBehavior", {
             "downward": this.localization("Downward Movement"),
@@ -7249,13 +7256,13 @@ class EmulatorJS {
                 "browser": this.localization("Keep in Browser")
             }, "download", saveStateOpts, true);
             addToMenu(this.localization("System Save interval"), "save-save-interval", {
-                "0": "Disabled",
-                "30": "30 seconds",
-                "60": "1 minute",
-                "300": "5 minutes",
-                "600": "10 minutes",
-                "900": "15 minutes",
-                "1800": "30 minutes"
+                "0": this.localization("Disabled"),
+                "30": "30 "+this.localization("seconds"),
+                "60": "1 "+this.localization("minute"),
+                "300": "5 "+this.localization("minutes"),
+                "600": "10 "+this.localization("minutes"),
+                "900": "15 "+this.localization("minutes"),
+                "1800": "30 "+this.localization("minutes")
             }, "300", saveStateOpts, true);
             checkForEmptyMenu(saveStateOpts);
         }
