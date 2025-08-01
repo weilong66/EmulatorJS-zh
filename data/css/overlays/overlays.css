@@ -23,7 +23,7 @@
 
 /* gba-遮罩样式 */
 .ejs_overlays_gba {
-    background: url('overlays/images/bg_gba.png') no-repeat top center, #765490;
+    background: url('css/overlays/images/bg_gba.png') no-repeat top center, #765490;
     background-size: contain;
     position: relative;
     justify-content: center;
@@ -37,14 +37,14 @@
 }
 .ejs_overlays_gba canvas {
     position: relative;
-    max-width: 58.4%;
+    max-width: 56%;
     height: auto;
     top: -5.4%;
 }
 
 /* nds-遮罩样式 */
 .ejs_overlays_nds {
-    background: url('overlays/images/bg_nds.png') no-repeat center center, #ffffff;
+    background: url('css/overlays/images/bg_nds.png') no-repeat center center, #ffffff;
     background-size: cover;
     color: #2f2f2f;
     position: relative;
@@ -59,43 +59,56 @@
 }
 .ejs_overlays_nds canvas {
     position: relative;
-    max-width: inherit;
-    height: auto;
+    width: auto;
+    height: inherit;
 }
 
+@media (max-width: 576px) {
+
+    .ejs_overlays_gba canvas {
+        max-width: 74%;
+        top: -1.2%;
+    }
+
+}
 
 /* 兼容小屏幕设备 */
-@media (max-width: 768px) {
-    .ejs_overlays_small canvas {
-        position: relative;
-        max-width: 100%;
-        height: auto;
-        top: 2%;
-    }
+@media (min-width: 567px) and (max-width: 768px) {
 
     .ejs_overlays_gba canvas {
-        position: relative;
-        max-width: 74%;
-        height: auto;
-        top: -5.9%;
+        max-width: 66%;
+        top: -5.2%;
     }
 
 }
-
-/* 兼容中等屏幕设备 */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .ejs_overlays_small canvas {
-        position: relative;
-        max-width: 100%;
-        height: auto;
-        top: 2%;
+@media (min-width: 769px) and (max-width: 992px) {
+    .ejs_overlays_gba canvas {
+        max-width: 54.5%;
+        top: -5.2%;
     }
     
+}
+@media (min-width: 993px) and (max-width: 1024px)  {
+
     .ejs_overlays_gba canvas {
-        position: relative;
-        max-width: 74%;
-        height: auto;
-        top: -1.2%;
+        max-width: 88%;
+        top: -5.2%;
+    }
+
+}
+@media (min-width: 1025px) and (max-width: 1200px)  {
+
+    .ejs_overlays_gba canvas {
+        max-width: 81.5%;
+        top: -5.2%;
+    }
+
+}
+@media (min-width: 1201px) {
+
+    .ejs_overlays_gba canvas {
+        max-width: 88%;
+        top: -5.2%;
     }
 
 }
