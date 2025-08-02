@@ -2,7 +2,7 @@
 
 /* small-遮罩样式 */
 .ejs_overlays_small {
-    background: #765490;
+    background: #333;
     position: relative;
     justify-content: center;
     align-items: center;
@@ -14,10 +14,10 @@
     display: flex;
 }
 .ejs_overlays_small canvas {
-    position: relative;
-    max-width: 58.4%;
-    height: auto;
-    top: -15%;
+    position: fixed;
+    width: auto;
+    height: 42vh;
+    top: 10vh;
 }
 
 
@@ -36,10 +36,10 @@
     display: flex;
 }
 .ejs_overlays_gba canvas {
-    position: relative;
-    max-width: 56%;
-    height: auto;
-    top: -5.4%;
+    position: fixed;
+    width: auto;
+    height: 58vh;
+    top: 10vh;
 }
 
 /* nds-遮罩样式 */
@@ -63,87 +63,11 @@
     height: inherit;
 }
 
-/* 兼容不同宽度屏幕的设备 */
-@media (max-width: 576px) {
-
+/* 兼容设备屏幕方向为纵向时 */
+@media (orientation: portrait){
     .ejs_overlays_gba canvas {
-        max-width: 74%;
-        top: -1.2%;
+        height:auto;
+        width: 100vw;
+        top:13vw;
     }
-
-}
-@media (min-width: 567px) and (max-width: 768px) {
-
-    .ejs_overlays_gba canvas {
-        max-width: 66%;
-        top: -5.3%;
-    }
-
-}
-@media (min-width: 769px) and (max-width: 992px) {
-    .ejs_overlays_gba canvas {
-        max-width: 54.4%;
-        top: -5.2%;
-    }
-    
-}
-@media (min-width: 993px) and (max-width: 1024px)  {
-
-    .ejs_overlays_gba canvas {
-        max-width: 88%;
-        top: -5.2%;
-    }
-
-}
-@media (min-width: 1025px) and (max-width: 1200px)  {
-
-    .ejs_overlays_gba canvas {
-        max-width: 81.5%;
-        top: -5.2%;
-    }
-
-}
-@media (min-width: 1201px) and (max-width: 1366px){
-
-    .ejs_overlays_gba canvas {
-        max-width: 88%;
-        top: -5.2%;
-    }
-
-}
-@media (min-width: 1367px){
-
-    .ejs_overlays_gba canvas {
-        max-width: 55.9%;
-        top: -5.3%;
-    }
-
-}
-
-/* 兼容不同宽度和高度的设备 */
-@media (min-width: 2400px) and (min-height: 1080px){
-
-    .ejs_overlays_gba canvas {
-        max-width: 52.7%;
-        top: -5.3%;
-    }
-
-}
-@media (min-width: 567px) and (max-width: 768px) and (min-height: 274px) and (max-height: 428px){
-
-    .ejs_overlays_gba canvas {
-        max-width: 42%;
-        top: -5.3%;
-    }
-
-}
-
-@media (min-width: 274px) and (max-width: 428px) and (min-height: 567px) and (max-height: 768px){
-
-    .ejs_overlays_gba c
-    anvas {
-        max-width: 99%;
-        top: -29%;
-    }
-
 }
