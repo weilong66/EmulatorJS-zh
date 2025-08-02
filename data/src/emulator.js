@@ -374,10 +374,11 @@ class EmulatorJS {
 
         this.createStartButton();
         this.handleResize();
-        
+
         //设置"遮罩"
         this.setOverlays(this.config.overlays);
     }
+
 
     // 根据遮罩值设置"遮罩"
     setOverlays(overlays) {
@@ -6004,7 +6005,7 @@ class EmulatorJS {
                     info[i].left = amnt.right;
                 }
             }
-        // 设置虚拟按键样式
+            // 设置虚拟按键样式
             let style = "";
             if (info[i].left) {
                 style += "left:" + info[i].left + (typeof info[i].left === "number" ? "px" : "") + ";";
@@ -6569,6 +6570,12 @@ class EmulatorJS {
             this.enableMouseLock = (value === "enabled");
         } else if (option === "overlays") { //设置项为"遮罩"时执行方法
             this.setOverlays(value);
+        } else if (option === "smoothing") { //设置项为"平滑(抗锯齿)"时执行方法
+            if (this.canvas && value === "enabled") {
+                this.canvas.classList.remove("pixelated");
+            }else if(this.canvas && value === "disabled"){
+                this.canvas.classList.add("pixelated");
+            }
         }
     }
     menuOptionChanged(option, value) {
@@ -6688,7 +6695,7 @@ class EmulatorJS {
                 optionButton.classList.add("ejs_option_row");
                 optionButton.classList.add("ejs_button_style");
 
-            //为菜单选项按钮绑定点击事件
+                //为菜单选项按钮绑定点击事件
                 this.addEventListener(optionButton, "click", (e) => {
                     this.disks[id] = opt; // 设置或更新与该选项关联的值
                     for (let j = 0; j < buttons.length; j++) {
@@ -7090,13 +7097,19 @@ class EmulatorJS {
         }, this.videoRotation.toString(), graphicsOptions, true);
 
         const screenCaptureOptions = createSettingParent(true, this.localization("Screen Capture"), home);
-        
+
+        //添加"平滑(抗锯齿)"选项
+        addToMenu(this.localization("Smoothing"), 'smoothing', {
+            "enabled": this.localization("Enabled"),
+            "disabled": this.localization("Disabled")
+        }, "disabled", graphicsOptions, true);
+
         //添加"遮罩"选项
-        addToMenu(this.localization("Overlays"), 'overlays', {
-            'disabled': this.localization("Disabled"),
-            'small': this.localization("Small"),
-            'gba': this.localization("GBA"),
-            'nds': this.localization("NDS")
+        addToMenu(this.localization("Overlays"), "overlays", {
+            "disabled": this.localization("Disabled"),
+            "small": this.localization("Small"),
+            "gba": this.localization("GBA"),
+            "nds": this.localization("NDS")
         }, "disabled", graphicsOptions, true);
 
         addToMenu(this.localization("Screenshot Source"), "screenshotSource", {
@@ -7257,12 +7270,12 @@ class EmulatorJS {
             }, "download", saveStateOpts, true);
             addToMenu(this.localization("System Save interval"), "save-save-interval", {
                 "0": this.localization("Disabled"),
-                "30": "30 "+this.localization("seconds"),
-                "60": "1 "+this.localization("minute"),
-                "300": "5 "+this.localization("minutes"),
-                "600": "10 "+this.localization("minutes"),
-                "900": "15 "+this.localization("minutes"),
-                "1800": "30 "+this.localization("minutes")
+                "30": "30 " + this.localization("seconds"),
+                "60": "1 " + this.localization("minute"),
+                "300": "5 " + this.localization("minutes"),
+                "600": "10 " + this.localization("minutes"),
+                "900": "15 " + this.localization("minutes"),
+                "1800": "30 " + this.localization("minutes")
             }, "300", saveStateOpts, true);
             checkForEmptyMenu(saveStateOpts);
         }

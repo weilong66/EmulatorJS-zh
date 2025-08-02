@@ -1,5 +1,14 @@
 /* @import url('VirtualGamepad.css'); */
 
+/* 像素化-样式 */
+.pixelated {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
 /* small-遮罩样式 */
 .ejs_overlays_small {
     background: #333;
