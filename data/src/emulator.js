@@ -8162,7 +8162,7 @@ class EmulatorJS {
         if (!this.gameManager) return;
         this.gameManager.setCheat(index, checked, code);
     }
-
+    //启动着色器函数
     enableShader(name) {
         if (!this.gameManager) return;
         try {

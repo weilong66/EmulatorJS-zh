@@ -38,8 +38,8 @@
 .ejs_overlays_gba canvas {
     position: fixed;
     width: auto;
-    height: 58vh;
-    top: 10vh;
+    height: 58.8vh;
+    top: 15.3vh;
 }
 
 /* nds-遮罩样式 */
